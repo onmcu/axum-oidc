@@ -1,4 +1,4 @@
-use axum::{extract::Query, response::Redirect, Extension};
+use axum::{extract::{Query, State}, response::Redirect, Extension};
 use openidconnect::{
     core::{CoreGenderClaim, CoreJsonWebKey},
     AccessToken, AccessTokenHash, AuthorizationCode, IdTokenClaims, IdTokenVerifier,
@@ -8,8 +8,7 @@ use serde::Deserialize;
 use tower_sessions::Session;
 
 use crate::{
-    error::HandlerError, AdditionalClaims, AuthenticatedSession, IdToken, OidcClient, OidcSession,
-    SESSION_KEY,
+    error::HandlerError, AdditionalClaims, AuthenticatedSession, Config, IdToken, OidcClient, OidcSession, SESSION_KEY
 };
 
 /// response data of the openid issuer after login
@@ -24,6 +23,7 @@ pub struct OidcQuery {
 pub async fn handle_oidc_redirect<AC: AdditionalClaims>(
     session: Session,
     Extension(oidcclient): Extension<OidcClient<AC>>,
+    State(config): State<Config>,
     Query(query): Query<OidcQuery>,
 ) -> Result<impl axum::response::IntoResponse, HandlerError> {
     let mut login_session: OidcSession<AC> = session
@@ -51,7 +51,7 @@ pub async fn handle_oidc_redirect<AC: AdditionalClaims>(
     let id_token = token_response
         .id_token()
         .ok_or(HandlerError::IdTokenMissing)?;
-    let id_token_verifier = oidcclient.client.id_token_verifier();
+    let id_token_verifier = oidcclient.client.id_token_verifier().set_other_audience_verifier_fn(|audience| config.other_audiences.contains(audience));
     let claims = id_token.claims(&id_token_verifier, &login_session.nonce)?;
 
     validate_access_token_hash(

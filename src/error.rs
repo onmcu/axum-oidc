@@ -41,6 +41,14 @@ pub enum MiddlewareError {
     #[error("claims verification: {0:?}")]
     ClaimsVerification(#[from] openidconnect::ClaimsVerificationError),
 
+    #[error("user info retrieval: {0:?}")]
+    UserInfoRetrieval(
+        #[from]
+        openidconnect::UserInfoError<
+            openidconnect::HttpClientError<openidconnect::reqwest::Error>,
+        >,
+    ),
+
     #[error("url parsing: {0:?}")]
     UrlParsing(#[from] openidconnect::url::ParseError),
 
@@ -153,6 +161,7 @@ impl IntoResponse for ExtractorError {
 
 impl IntoResponse for Error {
     fn into_response(self) -> axum_core::response::Response {
+        dbg!(self);
         match self {
             _ => (StatusCode::INTERNAL_SERVER_ERROR, "internal server error").into_response(),
         }
