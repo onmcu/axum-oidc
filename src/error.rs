@@ -82,7 +82,7 @@ pub enum MiddlewareError {
 
 #[derive(Debug, Error)]
 pub enum HandlerError {
-    #[error("the redirect handler got accessed without a valid session")]
+    #[error("redirect handler accessed without valid session, session cookie missing?")]
     RedirectedWithoutSession,
 
     #[error("csrf token invalid")]
@@ -161,7 +161,7 @@ impl IntoResponse for ExtractorError {
 
 impl IntoResponse for Error {
     fn into_response(self) -> axum_core::response::Response {
-        dbg!(self);
+        tracing::error!(error = self.to_string());
         match self {
             _ => (StatusCode::INTERNAL_SERVER_ERROR, "internal server error").into_response(),
         }
@@ -170,6 +170,7 @@ impl IntoResponse for Error {
 
 impl IntoResponse for MiddlewareError {
     fn into_response(self) -> axum_core::response::Response {
+        tracing::error!(error = self.to_string());
         match self {
             _ => (StatusCode::INTERNAL_SERVER_ERROR, "internal server error").into_response(),
         }
@@ -178,6 +179,7 @@ impl IntoResponse for MiddlewareError {
 
 impl IntoResponse for HandlerError {
     fn into_response(self) -> axum_core::response::Response {
+        tracing::error!(error = self.to_string());
         match self {
             _ => (StatusCode::INTERNAL_SERVER_ERROR, "internal server error").into_response(),
         }

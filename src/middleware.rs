@@ -26,7 +26,7 @@ use crate::{
     OidcSession, SESSION_KEY,
 };
 
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Debug)]
 pub struct Config {
     pub other_audiences: Vec<Audience>,
 }
