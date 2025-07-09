@@ -11,10 +11,7 @@ use openidconnect::{
         CoreJweContentEncryptionAlgorithm, CoreJweKeyManagementAlgorithm, CoreJwsSigningAlgorithm,
         CoreResponseMode, CoreResponseType, CoreRevocableToken, CoreRevocationErrorResponse,
         CoreSubjectIdentifierType, CoreTokenIntrospectionResponse, CoreTokenType,
-    },
-    AccessToken, CsrfToken, EmptyExtraTokenFields, EndpointMaybeSet, EndpointNotSet, EndpointSet,
-    IdTokenFields, Nonce, PkceCodeVerifier, RefreshToken, StandardErrorResponse,
-    StandardTokenResponse,
+    }, AccessToken, ClientId, CsrfToken, EmptyExtraTokenFields, EndpointMaybeSet, EndpointNotSet, EndpointSet, IdTokenFields, Nonce, PkceCodeVerifier, RefreshToken, StandardErrorResponse, StandardTokenResponse
 };
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
@@ -103,7 +100,7 @@ pub type BoxError = Box<dyn std::error::Error + Send + Sync>;
 #[derive(Clone)]
 pub struct OidcClient<AC: AdditionalClaims> {
     scopes: Vec<Box<str>>,
-    client_id: Box<str>,
+    client_id: ClientId,
     client: Client<AC>,
     http_client: reqwest::Client,
     end_session_endpoint: Option<Uri>,
