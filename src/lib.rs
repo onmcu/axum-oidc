@@ -11,7 +11,10 @@ use openidconnect::{
         CoreJweContentEncryptionAlgorithm, CoreJweKeyManagementAlgorithm, CoreJwsSigningAlgorithm,
         CoreResponseMode, CoreResponseType, CoreRevocableToken, CoreRevocationErrorResponse,
         CoreSubjectIdentifierType, CoreTokenIntrospectionResponse, CoreTokenType,
-    }, AccessToken, ClientId, CsrfToken, EmptyExtraTokenFields, EndpointMaybeSet, EndpointNotSet, EndpointSet, IdTokenFields, Nonce, PkceCodeVerifier, RefreshToken, StandardErrorResponse, StandardTokenResponse
+    },
+    AccessToken, CsrfToken, EmptyExtraTokenFields, EndpointMaybeSet, EndpointNotSet, EndpointSet,
+    IdTokenFields, Nonce, PkceCodeVerifier, RefreshToken, StandardErrorResponse,
+    StandardTokenResponse,
 };
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
@@ -21,10 +24,12 @@ mod extractor;
 mod handler;
 mod middleware;
 
-pub use extractor::{OidcAccessToken, OidcClaims, OidcUserClaims, OidcRpInitiatedLogout};
+pub use extractor::{OidcAccessToken, OidcClaims, OidcRpInitiatedLogout, OidcUserClaims};
 pub use handler::handle_oidc_redirect;
-pub use middleware::{Config, OidcAuthLayer, OidcAuthMiddleware, OidcLoginLayer, OidcLoginMiddleware};
-pub use openidconnect::Audience;
+pub use middleware::{
+    Config, OidcAuthLayer, OidcAuthMiddleware, OidcLoginLayer, OidcLoginMiddleware,
+};
+pub use openidconnect::{Audience, ClientId, ClientSecret};
 
 const SESSION_KEY: &str = "axum-oidc";
 
