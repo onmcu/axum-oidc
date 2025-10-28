@@ -199,9 +199,11 @@ impl<AC: AdditionalClaims> Builder<AC, ClientCredentials, (), HttpClient, Redire
     > {
         let issuer_url = IssuerUrl::new(issuer)?;
         let http_client = self.http_client.0.clone();
-        let provider_metadata = ProviderMetadata::discover_async(issuer_url, &http_client);
+        let provider_metadata = ProviderMetadata::discover_async(issuer_url, &http_client).await?;
 
-        Self::manual(self, provider_metadata.await?)
+        tracing::debug!(?provider_metadata);
+
+        Self::manual(self, provider_metadata)
     }
 }
 
