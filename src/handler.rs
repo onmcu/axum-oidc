@@ -32,7 +32,6 @@ pub async fn handle_oidc_redirect<AC: AdditionalClaims>(
     State(config): State<Config>,
     Query(query): Query<OidcQuery>,
 ) -> Result<impl axum::response::IntoResponse, HandlerError> {
-    
     tracing::debug!("start handling oidc redirect");
 
     let mut login_session: OidcSession<AC> = session
@@ -85,7 +84,18 @@ pub async fn handle_oidc_redirect<AC: AdditionalClaims>(
         access_token: token_response.access_token().clone(),
     });
     let refresh_token = token_response.refresh_token().cloned();
+
+    tracing::debug!(
+        "RefreshToken: {:?}",
+        refresh_token.clone().map(|t| t.secret().clone())
+    );
     if let Some(refresh_token) = refresh_token {
+        debug_assert_ne!(
+            refresh_token.secret().len(),
+            0,
+            "RefreshToken with length 0 is useless"
+        );
+        tracing::debug!("RefreshToken length: {}", refresh_token.secret().len());
         login_session.refresh_token = Some(refresh_token);
     }
 
