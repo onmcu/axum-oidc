@@ -1,0 +1,31 @@
+src/builder.rs
+  01f56d2ee3139dfc 1,3,238-240
+Cargo.toml
+  01f56d2ee3139dfc 15
+src/handler.rs
+  01f56d2ee3139dfc 45-46,60
+src/middleware.rs
+  01f56d2ee3139dfc 135-136,255,261,381-382,402-403,415
+src/lib.rs
+  01f56d2ee3139dfc 6-8,18-21,25-26,109-116,121-123,130-166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "1037b2ca0fa122f7b0fdd746910e098cf175020d",
+  "prompts": {
+    "01f56d2ee3139dfc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8024e876-3161-4388-a050-71434a7c5b8b",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "julidi",
+      "messages": [],
+      "total_additions": 78,
+      "total_deletions": 19,
+      "accepted_lines": 77,
+      "overriden_lines": 0
+    }
+  }
+}
